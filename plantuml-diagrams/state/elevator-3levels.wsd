@@ -1,0 +1,9 @@
+@startuml
+[*] --> Floor1 : Start
+Floor1 --> Floor2 : Move to Floor 2
+Floor1 --> Floor3 : Move to Floor 3
+Floor2 --> Floor1 : Move to Floor 1
+Floor2 --> Floor3 : Move to Floor 3
+Floor3 --> Floor1 : Move to Floor 1
+Floor3 --> Floor2 : Move to Floor 2
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+[*] --> Red
+Red --> Green : Timer expires
+Green --> Yellow : Timer expires
+Yellow --> Red : Timer expires
+@enduml

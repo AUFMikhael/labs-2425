@@ -1,0 +1,42 @@
+@startuml
+|User|
+start
+:Search for Book;
+:Select Book;
+if (Book Available?) then (yes)
+  :Borrow Book;
+  :Update Borrow Record;
+  :Receive Book;
+else (no)
+  :Notify Book Unavailable;
+endif
+stop
+
+|Library System|
+start
+:Receive Borrow Request;
+:Check Book Availability;
+if (Book Available?) then (yes)
+  :Update Book Status to Borrowed;
+  :Record Borrower Information;
+else (no)
+  :Notify User of Unavailability;
+endif
+stop
+
+|User|
+start
+:Return Book;
+:Update Return Record;
+:Receive Confirmation;
+stop
+
+|Library System|
+start
+:Receive Return Request;
+:Check Book Status;
+:Update Book Status to Available;
+:Record Return Information;
+:Send Confirmation;
+stop
+@enduml

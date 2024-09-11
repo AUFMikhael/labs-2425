@@ -1,0 +1,14 @@
+@startuml
+[*] --> Available
+
+Available --> Reserved : Reserve Book
+Reserved --> Borrowed : Borrow Book
+Borrowed --> Returned : Return Book
+Returned --> Available : Book Available
+Returned --> Lost : Mark as Lost
+Lost --> [*]
+
+Reserved --> Cancelled : Cancel Reservation
+Borrowed --> Overdue : Mark as Overdue
+Overdue --> Returned : Return Book
+@enduml

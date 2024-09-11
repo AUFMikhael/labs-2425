@@ -1,0 +1,14 @@
+@startuml
+[*] --> Available
+
+Available --> Reserved : Book Room
+Reserved --> CheckedIn : Check-In
+CheckedIn --> CheckedOut : Check-Out
+CheckedOut --> [*]
+
+Reserved --> Cancelled : Cancel Booking
+CheckedIn --> Cancelled : Cancel Booking
+CheckedOut --> [*]
+
+Cancelled --> [*]
+@enduml

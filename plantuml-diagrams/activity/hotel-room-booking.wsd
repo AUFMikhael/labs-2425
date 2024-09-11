@@ -1,0 +1,54 @@
+@startuml
+|Guest|
+start
+:Search for Available Rooms;
+:Select Room;
+if (Room Available?) then (yes)
+  :Enter Booking Details;
+  :Confirm Booking;
+  :Receive Booking Confirmation;
+else (no)
+  :Notify Room Unavailable;
+endif
+stop
+
+|Hotel System|
+start
+:Receive Booking Request;
+:Check Room Availability;
+if (Room Available?) then (yes)
+  :Reserve Room;
+  :Record Booking Information;
+  :Send Booking Confirmation;
+else (no)
+  :Notify Guest of Unavailability;
+endif
+stop
+
+|Guest|
+start
+:Check-in to Hotel;
+:Receive Room Key;
+stop
+
+|Hotel System|
+start
+:Check-in Guest;
+:Update Room Status to Occupied;
+:Provide Room Key;
+stop
+
+|Guest|
+start
+:Check-out of Hotel;
+:Return Room Key;
+stop
+
+|Hotel System|
+start
+:Check-out Guest;
+:Update Room Status to Available;
+:Process Billing;
+:Send Receipt;
+stop
+@enduml

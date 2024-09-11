@@ -1,0 +1,13 @@
+@startuml
+[*] --> Created
+
+Created --> Processed : Process Order
+Processed --> Shipped : Ship Order
+Shipped --> Delivered : Deliver Order
+Delivered --> [*]
+
+Created --> Cancelled : Cancel Order
+Processed --> Cancelled : Cancel Order
+Shipped --> Returned : Return Order
+Returned --> [*]
+@enduml

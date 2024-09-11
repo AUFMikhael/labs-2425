@@ -1,0 +1,20 @@
+@startuml
+[*] --> Idle
+
+Idle : Waiting for customer input
+Idle --> ProductSelected : Product selected
+
+ProductSelected : Waiting for payment
+ProductSelected --> InsufficientPayment : Payment inserted, but insufficient
+ProductSelected --> SufficientPayment : Payment inserted, sufficient amount
+
+InsufficientPayment : Waiting for more payment
+InsufficientPayment --> SufficientPayment : Additional payment inserted
+
+SufficientPayment --> DispenseProduct : Product dispensed
+SufficientPayment --> ReturnChange : Product dispensed with change returned
+
+DispenseProduct --> Idle : Transaction completed
+ReturnChange --> Idle : Change returned, transaction completed
+
+@enduml

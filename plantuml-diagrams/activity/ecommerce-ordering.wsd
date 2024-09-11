@@ -1,0 +1,54 @@
+@startuml
+|Customer|
+start
+:Browse Products;
+:Select Product;
+:Add to Cart;
+:View Cart;
+if (Cart Updated?) then (yes)
+  :Proceed to Checkout;
+else (no)
+  :Continue Shopping;
+endif
+:Enter Shipping Details;
+:Enter Payment Information;
+:Confirm Order;
+:Receive Order Confirmation;
+stop
+
+|E-Commerce System|
+start
+:Receive Order Request;
+:Validate Payment Information;
+:Check Stock Availability;
+if (Stock Available?) then (yes)
+  :Process Payment;
+  :Update Inventory;
+  :Generate Order;
+  :Send Order Confirmation;
+else (no)
+  :Notify Customer of Out of Stock;
+endif
+stop
+
+|Warehouse|
+start
+:Receive Order;
+:Pick and Pack Items;
+:Arrange Shipping;
+:Update Shipping Status;
+stop
+
+|Customer|
+start
+:Receive Shipment;
+:Confirm Receipt;
+stop
+
+|E-Commerce System|
+start
+:Receive Shipment Confirmation;
+:Update Order Status to Delivered;
+:Send Delivery Confirmation;
+stop
+@enduml
