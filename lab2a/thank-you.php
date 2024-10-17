@@ -1,34 +1,53 @@
 <?php
 
 require "helpers/helper-functions.php";
+session_start(); // Ensure that the session is started
 
-session_start();
+// Retrieve session data (values set in previous pages)
+$fullname = isset($_SESSION['fullname']) ? $_SESSION['fullname'] : "N/A";
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : "N/A";
+$password = isset($_SESSION['password']) ? $_SESSION['password'] : "N/A";
+$birthdate = isset($_SESSION['birthdate']) ? $_SESSION['birthdate'] : "N/A";
+$sex = isset($_SESSION['sex']) ? $_SESSION['sex'] : "N/A";
+$address = isset($_SESSION['address']) ? $_SESSION['address'] : "N/A";
 
-$contact_number = $_POST['contact_number'];
-$program = $_POST['program'];
-$agree = $_POST['agree'];
+// Retrieve the contact number and program from the current form submission
+$contact_number = isset($_POST['contact_number']) ? $_POST['contact_number'] : "N/A";
+$program = isset($_POST['program']) ? $_POST['program'] : "N/A";
+$agree = isset($_POST['agree']) ? $_POST['agree'] : "N/A";
 
-$_SESSION['contact_number'] = $contact_number;
-$_SESSION['program'] = $program;
-$_SESSION['agree'] = $agree;
-
-$form_data = $_SESSION;
-
-if (isset($_SESSION['birthdate'])) {
-  $birthdate = $_SESSION['birthdate'];
-  $birthdateDateTime = DateTime::createFromFormat('F j, Y', $birthdate); // Assuming the format is 'F j, Y'
-  $currentDate = new DateTime();
-  
-  // Calculate age
-  $age = $currentDate->diff($birthdateDateTime)->y; // Get the difference in years
+// Calculate age from birthdate
+if ($birthdate !== "N/A") {
+    $birthdateDateTime = DateTime::createFromFormat('F j, Y', $birthdate); // Assuming the format is 'F j, Y'
+    $currentDate = new DateTime();
+    
+    // Calculate age
+    $age = $currentDate->diff($birthdateDateTime)->y; // Get the difference in years
 } else {
-  $age = "N/A"; // In case birthdate is not set
+    $age = "N/A"; // In case birthdate is not set
 }
+
+// Prepare CSV data
+$csv_data = [$fullname, $email, $password, $birthdate, $sex, $address, $contact_number, $program, $agree, $age];
+
+// Open the CSV file in append mode
+$file = fopen('registrations.csv', 'a');
+
+// Use fputcsv to write the data as a CSV row
+if ($file) {
+    fputcsv($file, $csv_data);
+    fclose($file);
+} else {
+    echo "Error opening the CSV file.";
+}
+
+// Use $_SESSION directly to display the session data
+$form_data = $_SESSION; // Assign the session data to the $form_data variable
 
 dump_session();
 
-session_destroy();
 ?>
+
 <html>
 <head>
     <meta charset="utf-8">
@@ -42,9 +61,7 @@ session_destroy();
   <div class="row--50-50-on-large">
     <div class="col">
       <div class="p-section--shallow">
-        <h1>
-          Thank You Page
-        </h1>
+        <h1>Thank You Page</h1>
       </div>
       <div class="p-section--shallow">
       
@@ -57,13 +74,12 @@ session_destroy();
             </thead>
             <tbody>
             <?php
+            // Now using the $form_data which holds session data
             foreach ($form_data as $key => $val):
             ?>
                 <tr>
                     <th><?php echo $key; ?></th>
-                    <td>
-                      <?php echo $val; ?>
-                    </td>
+                    <td><?php echo $val; ?></td>
                 </tr>
             <?php
             endforeach;
@@ -75,6 +91,7 @@ session_destroy();
             </tbody>
         </table>
       
+        <a href="registrants.php" class="p-button">View All Registrants</a>
 
       </div>
     </div>
