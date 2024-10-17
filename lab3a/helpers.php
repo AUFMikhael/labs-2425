@@ -33,9 +33,9 @@ function compute_score($answers = []) {
     $correct_answers = $questions['answers'];
 
     $score = 0;
-    for ($i = 0; $i < MAX_QUESTION_NUMBER; $i++) {
-        if ($correct_answers[$i] == $answers[$i]) {
-            $score += 100;
+    for ($i = 0; $i < min(count($correct_answers), count($answers)); $i++) {
+        if (isset($correct_answers[$i]) && $correct_answers[$i] === $answers[$i]) {
+            $score += 1; // Each correct answer gives 1 point
         }
     }
     return $score;

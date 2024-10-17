@@ -8,72 +8,76 @@ require "helpers.php";
 // Supply the missing code
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: index.php');
+    exit();
 }
 
 // Supply the missing code
+// Retrieve form data
 $complete_name = $_POST['complete_name'];
 $email = $_POST['email'];
 $birthdate = $_POST['birthdate'];
 $contact_number = $_POST['contact_number'];
-$agree = $_POST['agree'];
-$answer = $_POST['answer'] ?? null;
-$answers = $_POST['answers'] ?? null;
-if (!is_null($answer)) {
-    $answers .= $answer;
-}
+$agree = isset($_POST['agree']) ? $_POST['agree'] : 'false';
 
+// Load questions from triviaquiz.json
 $questions = retrieve_questions();
-$current_question = get_current_question($answers);
-$current_question_number = get_current_question_number($answers);
-
-$target = 'quiz.php';
-if ($current_question_number == MAX_QUESTION_NUMBER) {
-    $target = 'result.php';
-}
-
-$options = get_options_for_question_number($current_question_number);
 ?>
+
 <html>
 <head>
     <meta charset="utf-8">
     <title>IPT10 Laboratory Activity #3A</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+
+    <script>
+        // JavaScript function to auto-submit the quiz form after 60 seconds
+        function autoSubmitForm() {
+            setTimeout(function() {
+                document.getElementById('quiz-form').submit();
+            }, 60000); // 60 seconds
+        }
+        // Call the auto-submit function when the page loads
+        window.onload = autoSubmitForm;
+    </script>
+
 </head>
 <body>
 <section class="section">
-    <h1 class="title">Question <?php echo $current_question_number; ?> / <?php echo MAX_QUESTION_NUMBER; ?></h1>
-    <h2 class="subtitle">
-        <?php echo $current_question['question']; ?>
-    </h2>
+    <h1 class="title">Quiz</h1>
+    <h2 class="subtitle">Answer all the questions below:</h2>
 
     <!-- Supply the correct HTTP method and target form handler resource -->
 
-    <form method="POST" action="<?php echo $target; ?>">
-        <input type="hidden" name="complete_name" value="<?php echo $complete_name; ?>" />
-        <input type="hidden" name="email" value="<?php echo $email; ?>" />
-        <input type="hidden" name="birthdate" value="<?php echo $birthdate; ?>" />
-        <input type="hidden" name="contact_number" value="<?php echo $contact_number; ?>" />
-        <input type="hidden" name="agree" value="<?php echo $agree; ?>" />
+    <form id="quiz-form" method="POST" action="result.php">
+        <!-- Hidden fields to store user data -->
+        <input type="hidden" name="complete_name" value="<?php echo htmlspecialchars($complete_name); ?>" />
+        <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>" />
+        <input type="hidden" name="birthdate" value="<?php echo htmlspecialchars($birthdate); ?>" />
+        <input type="hidden" name="contact_number" value="<?php echo htmlspecialchars($contact_number); ?>" />
+        <input type="hidden" name="agree" value="<?php echo htmlspecialchars($agree); ?>" />
         <!--
         <input type="hidden" name="answers" />
         -->
 
         <!-- Display the options -->
-        <?php foreach ($answers as $answer): ?>
-        <div class="field">
-            <div class="control">
-                <label class="radio">
-                    <input type="radio"
-                        name="answer"
-                        value="<?php echo $option['key']; ?>" />
-                        <?php echo $option['value']; ?>
-                </label>
+        <?php foreach ($questions['questions'] as $index => $question): ?>
+            <div class="box">
+                <h3 class="title is-5"><?php echo ($index + 1) . ". " . htmlspecialchars($question['question']); ?></h3>
+                <?php foreach ($question['options'] as $option): ?>
+                    <div class="field">
+                        <div class="control">
+                            <label class="radio">
+                                <input type="radio" name="answers[<?php echo $index; ?>]" value="<?php echo $option['key']; ?>" required>
+                                <?php echo htmlspecialchars($option['key']) . ". " . htmlspecialchars($option['value']); ?>
+                            </label>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        </div>
         <?php endforeach; ?>
 
         <!-- Start Quiz button -->
-        <button type="submit" class="button">Submit</button>
+        <button type="submit" class="button is-link">Submit Quiz</button>
     </form>
 </section>
 

@@ -4,22 +4,42 @@ require "helpers.php";
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: index.php');
+    exit();
 }
 
 // Supply the missing code
-$complete_name = $_POST['complete_name'];
-$email = $_POST['email'];
-$birthdate = $_POST['birthdate'];
-$contact_number = $_POST['contact_number'];
-$agree = $_POST['agree'];
-$answer = $_POST['answer'] ?? null;
-$answers = $_POST['answers'] ?? null;
-if (!is_null($answer)) {
-    $answers .= $answer;
-}
+$complete_name = $_POST['complete_name'] ?? 'N/A';
+$email = $_POST['email'] ?? 'N/A';
+$birthdate = $_POST['birthdate'] ?? 'N/A';
+$contact_number = $_POST['contact_number'] ?? 'N/A';
+$agree = $_POST['agree'] ?? 'N/A';
+$answers = $_POST['answers'] ?? [];
 
 // Use the compute_score() function from helpers.php
 // $score = compute_score($answers);
+
+$score = compute_score($answers);
+
+$hero_class = ($score > 2) ? 'is-success' : 'is-danger';
+
+// Format birthdate 
+$formatted_birthdate = date("F d, Y", strtotime($birthdate));
+
+// Retrieve questions and answers
+$questions_data = json_decode(file_get_contents('questions/triviaquiz.json'), true);
+
+// Check if the file was loaded successfully and contains the expected keys
+if ($questions_data === null || !isset($questions_data['questions'], $questions_data['answers'])) {
+    die('Error: Unable to load questions from triviaquiz.json. Please check the file path and structure.');
+}
+
+$questions = $questions_data['questions'];
+$correct_answers = $questions_data['answers'];
+
+if (count($correct_answers) < count($questions)) {
+    die('Error: The number of correct answers does not match the number of questions.');
+}
+
 ?>
 <html>
 <head>
@@ -30,12 +50,13 @@ if (!is_null($answer)) {
     <script src="https://cdn.jsdelivr.net/npm/confetti-js@0.0.18/dist/index.min.js"></script>
 </head>
 <body>
-<section class="hero">
+<section class="hero <?php echo $hero_class; ?>">
     <div class="hero-body">
-        <p class="title">Your Score <?php echo $score; ?></p>
+        <p class="title">Your Score: <?php echo $score; ?></p>
         <p class="subtitle">This is the IPT10 PHP Quiz Web Application Laboratory Activity.</p>
     </div>
 </section>
+
 <section class="section">
     <div class="table-container">
         <table class="table is-bordered is-hoverable is-fullwidth">
@@ -54,7 +75,7 @@ if (!is_null($answer)) {
                 </tr>
                 <tr>
                     <td>Birthdate</td>
-                    <td><?php echo $birthdate; ?></td>
+                    <td><?php echo $formatted_birthdate; ?></td>
                 </tr>
                 <tr>
                     <td>Contact Number</td>
@@ -64,15 +85,41 @@ if (!is_null($answer)) {
         </table>
     </div>
     
-    <canvas id="confetti-canvas"></canvas>
+    <!-- Show confetti only if the user scored 5/5 -->
+    <?php if ($score === 5): ?>
+        <canvas id="confetti-canvas"></canvas>
+    <?php endif; ?>
+
+    <!-- Questions and Answers Table -->
+    <h2 class="subtitle">Your Answers</h2>
+    <table class="table is-bordered is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Correct Answer</th>
+                <th>Your Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($questions as $index => $question): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($question['question']); ?></td>
+                    <td><?php echo htmlspecialchars($correct_answers[$index] ?? 'N/A'); ?></td>
+                    <td><?php echo htmlspecialchars($answers[$index] ?? 'Not answered'); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </section>
 
 <script>
-var confettiSettings = {
-    target: 'confetti-canvas'
-};
-var confetti = new ConfettiGenerator(confettiSettings);
-confetti.render();
+    <?php if ($score === 5): ?>
+        var confettiSettings = {
+            target: 'confetti-canvas'
+        };
+        var confetti = new ConfettiGenerator(confettiSettings);
+        confetti.render();
+    <?php endif; ?>
 </script>
 </body>
 </html>
