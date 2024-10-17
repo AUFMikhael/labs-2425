@@ -11,22 +11,24 @@ Registration Page
 
 <form action="target.php" method="POST"> 
     <label> First Name </label>         
-    <input type="text" name="firstname" size="15"/>
+    <input type="text" name="firstname" size="15" required/>
     <label> Middle Name: </label>     
-    <input type="text" name="middlename" size="15"/>
+    <input type="text" name="middlename" size="15" required/>
     <label> Last Name: </label>         
-    <input type="text" name="lastname" size="15"/> <br> <br>  
+    <input type="text" name="lastname" size="15" required/> <br> <br>  
+
     Email:  
-    <input type="email" name="email"/> 
+    <input type="email" name="email" required/> 
     
     <label>Phone:</label>  
-    <input type="text" name="country code"  value="+63" size="2"/>   
+    <input type="text" name="country_code"  value="+63" size="2"/>   
     <input type="number" name="phone_number" size="10"/> <br> <br> 
 
     <label>Sex:</label><br>  
     <input type="radio" name="sex" value="male" checked="checked" /> Male <br>  
     <input type="radio" name="sex" value="female" /> Female
     <br>  <br>
+
     Birthdate:  
     <input type="date" name="birthdate"/> <br>   
     <br>  
@@ -42,13 +44,26 @@ Registration Page
     
     <br>  
     <br>  
+
+    <label>College Department:</label>
+    <select name="department">
+    <option value="CCS">College of Computer Studies (CCS)</option>  
+    <option value="COB">College of Business</option>  
+    <option value="COE">College of Engineering</option>  
+    <option value="CAS">College of Arts and Sciences</option>  
+    <option value="CHM">College of Hospitality Management</option>
+    </select>  
+    
+    <br>  
+    <br>  
      
     Address  
     <br>  
     <textarea cols="80" rows="5" name="address"></textarea>  
     <br> <br>     
 
-    <input type="submit" value="Register Now"/>  
+    <input type="reset" value="Reset Form"/> 
+    <input type="submit" value="Register Now"/> 
 </form>  
 
 </body>  
