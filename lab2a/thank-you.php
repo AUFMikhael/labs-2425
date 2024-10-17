@@ -14,6 +14,17 @@ $_SESSION['agree'] = $agree;
 
 $form_data = $_SESSION;
 
+if (isset($_SESSION['birthdate'])) {
+  $birthdate = $_SESSION['birthdate'];
+  $birthdateDateTime = DateTime::createFromFormat('F j, Y', $birthdate); // Assuming the format is 'F j, Y'
+  $currentDate = new DateTime();
+  
+  // Calculate age
+  $age = $currentDate->diff($birthdateDateTime)->y; // Get the difference in years
+} else {
+  $age = "N/A"; // In case birthdate is not set
+}
+
 dump_session();
 
 session_destroy();
@@ -57,6 +68,10 @@ session_destroy();
             <?php
             endforeach;
             ?>
+            <tr>
+                <th>Age</th>
+                <td><?php echo $age; ?></td> <!-- Display the calculated age -->
+            </tr>
             </tbody>
         </table>
       

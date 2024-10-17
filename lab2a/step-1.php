@@ -29,13 +29,13 @@ session_start();
 
         <fieldset>
           <label>Complete Name</label>
-          <input type="text" name="fullname" placeholder="John Doe">
+          <input type="text" name="fullname" placeholder="John Doe" required>
 
           <label>Email address</label>
-          <input type="email" name="email" placeholder="example@canonical.com" autocomplete="email">
+          <input type="email" name="email" placeholder="example@canonical.com" autocomplete="email" required>
 
           <label>Password</label>
-          <input type="password" name="password" placeholder="******" autocomplete="current-password">
+          <input type="password" name="password" placeholder="******" autocomplete="current-password" required>
 
           <button type="submit">Next</button>
         </fieldset>

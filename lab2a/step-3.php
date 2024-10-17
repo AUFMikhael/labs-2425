@@ -8,7 +8,11 @@ $birthdate = $_POST['birthdate'];
 $sex = $_POST['sex'];
 $address = $_POST['address'];
 
-$_SESSION['birthdate'] = $birthdate;
+$birthdate = $_POST['birthdate']; // Format: 'YYYY-MM-DD'
+$formattedBirthdate = (new DateTime($birthdate))->format('F j, Y'); // Format to 'June 15, 2001'
+// Store the formatted date in the session
+$_SESSION['birthdate'] = $formattedBirthdate;
+
 $_SESSION['sex'] = $sex;
 $_SESSION['address'] = $address;
 
@@ -38,10 +42,10 @@ dump_session();
 
           <fieldset>
             <label>Contact Number</label>
-            <input type="text" name="contact_number" placeholder="+639123456789" />
+            <input type="text" name="contact_number" placeholder="+639123456789" required/>
 
             <label>Program</label>
-            <select name="program">
+            <select name="program" required>
               <option disabled="disabled" selected="">Select an option</option>
               <option value="cs">Computer Science</option>
               <option value="it">Information Technology</option>
@@ -51,7 +55,7 @@ dump_session();
             </select>
 
             <label class="p-checkbox--inline">
-            <input type="checkbox" name="agree">
+              <input type="checkbox" name="agree" required>
             </label>
             I agree to the terms and conditions...
             
