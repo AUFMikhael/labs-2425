@@ -21,16 +21,15 @@
   <div class="col">
     <h4>File Upload</h4>
 
-    <form>
-        <div class="p-card">
-            <h3>Text File</h3>
-            <p class="p-card__content">
-            <input type="file" name="text_file" accept=".txt" />
-            </p>
+    <form action="uploaded.php" method="POST" enctype="multipart/form-data">
+    <div class="p-card">
+        <h3>PDF File</h3>
+        <p class="p-card__content">
+        <input type="file" name="pdf_file" accept=".pdf" />
+        </p>
         </div>
-
         <div>
-            <button>
+            <button type="submit">
                 Upload
             </button>
         </div>
