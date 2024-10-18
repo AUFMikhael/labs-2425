@@ -23,9 +23,9 @@
 
     <form action="uploaded.php" method="POST" enctype="multipart/form-data">
         <div class="p-card">
-            <h3>Image File</h3>
+            <h3>Video File</h3>
             <p class="p-card__content">
-            <input type="file" name="image_file" accept="image/*" />
+            <input type="file" name="video_file" accept=".mp4" />
             </p>
         </div>
         <div>
